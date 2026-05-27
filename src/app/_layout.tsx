@@ -1,4 +1,5 @@
 import { Stack } from "expo-router";
+import { StatusBar } from "react-native";
 import "../../global.css";
 
 export default function RootLayout() {
@@ -9,6 +10,7 @@ export default function RootLayout() {
         contentStyle: { backgroundColor: "transparent" },
       }}
     >
+      <StatusBar barStyle={"dark-content"} />
       <Stack.Screen
         name="index"
         options={{ title: "Home", headerShown: false }}
@@ -17,7 +19,7 @@ export default function RootLayout() {
       <Stack.Screen name="(tabs)" />
       <Stack.Screen
         name="login"
-        options={{ title: "Login", headerShown: true }}
+        options={{ title: "Login", headerShown: false }}
       />
       <Stack.Screen
         name="modal"

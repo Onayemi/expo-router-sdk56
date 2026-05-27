@@ -3,3 +3,27 @@
 @import "tailwindcss/preflight.css" layer(base);
 @import "tailwindcss/utilities.css";
 @import "nativewind/theme";
+
+/* Add custom styles here */
+:root {
+  /* custom color variables */
+  --color-primary: #4f46e5;
+  --color-secondary: #6b7280;
+  --color-accent: #df1256;
+  --color-background: #f9fafb;
+  --color-text: #111827;
+}
+
+/* Example of a custom utility class */
+.bg-primary {
+  background-color: var(--color-primary);
+}
+.text-accent {
+  color: var(--color-accent);
+}
+.text-primary {
+  color: var(--color-primary);
+}
+.text-secondary {
+  color: var(--color-secondary);
+}

@@ -1,39 +1,31 @@
-import { Stack } from "expo-router";
-import { StatusBar } from "react-native";
-import "../../global.css";
+import "../global.css"
+import { useAuthStore } from "@/store/useAuthStore";
+import { Stack, useRouter } from "expo-router";
+import { useEffect } from "react";
 
 export default function RootLayout() {
+  const { isAuthenticated, isHydrated, hydrateAuth } = useAuthStore();
+  const router = useRouter();
+
+  useEffect(() => {
+    hydrateAuth();
+  }, []);
+
+  useEffect(() => {
+    if (!isHydrated) return;
+
+    if (!isAuthenticated) {
+      router.replace("/login");
+    } else {
+      router.replace("/(tabs)");
+    }
+  }, [isAuthenticated, isHydrated]);
+
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        contentStyle: { backgroundColor: "transparent" },
-      }}
-    >
-      <StatusBar barStyle={"dark-content"} />
-      <Stack.Screen
-        name="index"
-        options={{ title: "Home", headerShown: false }}
-      />
-      <Stack.Screen name="splash" options={{ headerShown: false }} />
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="splash" />
+      <Stack.Screen name="login" />
       <Stack.Screen name="(tabs)" />
-      <Stack.Screen
-        name="login"
-        options={{ title: "Login", headerShown: false }}
-      />
-      <Stack.Screen
-        name="modal"
-        options={{ presentation: "modal", headerShown: true }}
-      />
     </Stack>
   );
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-// });

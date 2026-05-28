@@ -1,0 +1,221 @@
+npm install -g eas-cli
+eas login
+eas build:configure
+
+Updated eas.json
+This ensures you have a preview profile for quick APK/Simulator testing, alongside your production tracks.
+
+{
+  "build": {
+    "preview": {
+      "android": { "buildType": "apk" },
+      "ios": { "simulator": true }
+    },
+    "production": {
+      "android": { "buildType": "app-bundle" },
+      "ios": { "buildConfiguration": "Release" }
+    }
+  },
+  "submit": {
+    "preview": {
+      "android": { "track": "internal" }, 
+      "ios": { "ascAppId": "YOUR_APPLE_APP_ID" }
+    },
+    "internal": {
+      "android": { "track": "internal" },
+      "ios": { "ascAppId": "YOUR_APPLE_APP_ID" }
+    },
+    "closed": {
+      "android": { "track": "alpha" },
+      "ios": { "ascAppId": "YOUR_APPLE_APP_ID" }
+    },
+    "production": {
+      "android": { "track": "production" },
+      "ios": { "ascAppId": "YOUR_APPLE_APP_ID" }
+    }
+  }
+}
+
+
+eas build --platform android --profile preview
+
+Post-Build Process
+Once the command is running:
+
+Monitor Progress: The terminal will provide a URL to your Expo dashboard where you can track the build progress.
+
+Wait for Completion: EAS will handle the compilation on their servers.
+
+Download/Install: Once finished, the dashboard will provide a link to download the .apk file.
+
+You can copy this link and send it directly to your Android device to install it.
+
+Alternatively, if you have the Android Emulator running, you can use:
+
+Bash
+eas build:run -p android
+Summary Checklist
+Step	Action	Command
+1	Install CLI	npm install -g eas-cli
+2	Login	eas login
+3	Configure	eas build:configure
+4	Build	eas build -p android --profile preview
+Are you planning to share this build with other testers, or is it primarily for your own local testing?
+
+eas build:run -p android
+
+Step 2: The Workflow (Build & Submit)
+A. Build for Production
+Always use app-bundle (AAB) for Play Store submissions.
+
+eas build --platform android --profile production
+
+B. Submit to Internal Testing
+Once the build is complete, send it to the Internal track for your testers:
+
+eas submit --platform android --profile internal
+
+Your testers, who are added in the Google Play Console "Internal Testing" tab, will receive the update automatically via the Play Store.
+
+C. Promote to Production
+Once your testing is successful, you do not need to rebuild the app. You can submit that same binary directly to the Production track:
+
+eas submit --platform android --profile production
+
+
+eas.json Configuration
+This file acts as the "source of truth" for your build and submission profiles. Add this structure to your eas.json at the root of your project.
+
+
+{
+  "build": {
+    "preview": {
+      "android": { "buildType": "apk" },
+      "ios": { "simulator": true }
+    },
+    "production": {
+      "android": { "buildType": "app-bundle" },
+      "ios": { "buildConfiguration": "Release" }
+    }
+  },
+  "submit": {
+    "preview": {
+      "android": { "track": "internal" }, 
+      "ios": { "ascAppId": "YOUR_APPLE_APP_ID" }
+    },
+    "internal": {
+      "android": { "track": "internal" },
+      "ios": { "ascAppId": "YOUR_APPLE_APP_ID" }
+    },
+    "closed": {
+      "android": { "track": "alpha" },
+      "ios": { "ascAppId": "YOUR_APPLE_APP_ID" }
+    },
+    "production": {
+      "android": { "track": "production" },
+      "ios": { "ascAppId": "YOUR_APPLE_APP_ID" }
+    }
+  }
+}
+
+
+GitHub Actions Workflow
+Create .github/workflows/release.yml. This allows you to trigger builds via the GitHub Actions "Run workflow" UI.
+
+GitHub Actions (Updated for Preview)
+Update your workflow inputs to include preview.
+
+
+name: Release App
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Platform (android/ios)'
+        required: true
+      # 'preview' does not auto-submit, so we handle logic accordingly
+      profile:
+        description: 'Profile (preview/production)'
+        required: true
+      track:
+        description: 'Track (internal/closed/production) - Only if profile is production'
+        required: false
+
+jobs:
+  build_and_submit:
+    runs-on: ${{ github.event.inputs.platform == 'ios' && 'macos-latest' || 'ubuntu-latest' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: expo/expo-github-action@v8
+        with:
+          token: ${{ secrets.EXPO_TOKEN }}
+      - name: Build and Submit
+        run: |
+          if [ "${{ github.event.inputs.profile }}" == "preview" ]; then
+            eas build -p ${{ github.event.inputs.platform }} --profile preview --non-interactive
+          else
+            eas build -p ${{ github.event.inputs.platform }} --profile production --auto-submit-with-profile ${{ github.event.inputs.track }} --non-interactive
+          fi
+
+
+EXPO_TOKEN
+The EXPO_TOKEN is a secure "key" that allows GitHub Actions to act as you when communicating with Expo Application Services.
+
+What it does: Instead of having to log in manually (eas login) inside a CI/CD environment, the token provides authentication so the build and submit commands have permission to access your Expo project and cloud resources.
+
+How to add it:
+
+Go to your Expo Dashboard.
+
+Create a new Access Token.
+
+In your GitHub repository, go to Settings > Secrets and variables > Actions.
+
+Click New repository secret.
+
+Name it EXPO_TOKEN and paste your token value.
+
+3. Service Account Credentials
+For Android, Google Play needs proof that the person (or machine) uploading the app has permission to do so. A "Service Account" is a special Google account for bots/machines.
+
+What it is: A JSON file containing the security credentials for your Service Account.
+
+How to add it:
+
+Generate it: Create a Service Account in the Google Cloud Console, grant it "Developer" permissions for your Play Console, and download the .json key file.
+
+Upload to EAS: You don't paste this into GitHub Secrets. Instead, you run eas credentials in your local terminal inside your project folder.
+
+The CLI will guide you to upload the JSON file to Expo’s secure credential storage. EAS will then use these credentials automatically whenever you run eas submit.
+
+Where to store the JSON file
+Keep the JSON file on your local machine only during the setup process. You can place it in a safe folder outside of your project directory, or in a hidden folder inside your project (e.g., .private/service-account.json) that is listed in your .gitignore file to ensure it is never uploaded to Git.
+
+2. How to upload it to Expo (The Secure Way)
+The goal is to get that JSON file off your computer and into Expo’s secure "Credentials" storage. Once it is on Expo’s servers, you can delete the local file.
+
+Follow these steps in your terminal:
+
+Run the configuration command:
+In your project root, run:
+
+Bash
+eas credentials
+Select Platform:
+Select Android.
+
+Select Profile:
+Select the build profile you are configuring (e.g., production).
+
+Select Google Service Account:
+You will see a menu of options. Look for an option related to "Google Service Account" or "Service Credentials".
+
+Upload the Key:
+
+Select "Upload a Google Service Account Key" (or the equivalent option based on your CLI version).
+
+The CLI will prompt you for the file path to your .json file.
+
+Enter the path (e.g., ./.private/my-service-account.json).
+
+EAS will securely encrypt and store this on their servers.

@@ -6,7 +6,7 @@ bun create expo-app frontend-app --template tabs
 
 cd frontend-app
 
-# Install native routing, authentication state, validation, and HTTP utilities
+# Install native routing, authentication state, validation, & HTTP utilities
 
 bun add zustand axios zod expo-secure-store
 bunx expo start
@@ -17,5 +17,6 @@ bun add @react-navigation/native
 bun add react-native-screens react-native-safe-area-context
 
 # update expo sdk
+
 bun add expo@56.0.6
 bunx expo install --check

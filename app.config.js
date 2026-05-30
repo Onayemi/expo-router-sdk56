@@ -16,6 +16,15 @@ export default {
       },
     },
     android: {
+      intentFilters: [
+        {
+          action: "VIEW",
+          data: {
+            scheme: "https",
+            host: "wa.me",
+          },
+        },
+      ],
       adaptiveIcon: {
         backgroundColor: "#E6F4FE",
         foregroundImage: "./assets/images/android-icon-foreground.png",

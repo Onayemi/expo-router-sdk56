@@ -14,6 +14,7 @@ interface AuthState {
   token: string | null;
   isAuthenticated: boolean;
   isHydrated: boolean;
+  login_test: (credentials: any) => Promise<void>;
   login: (credentials: any) => Promise<void>;
   register: (details: any) => Promise<void>;
   fetchUser: () => Promise<void>;
@@ -47,8 +48,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
     // 2. Local Business Logic for Mock Testing
     if (
-      credentials.email === "test@example.com" &&
-      credentials.password === "password123"
+      credentials.email === "onayemi18@gmail.com" &&
+      credentials.password === "123456"
     ) {
       const dummyToken = "mock-jwt-token-12345";
       const dummyUser = {

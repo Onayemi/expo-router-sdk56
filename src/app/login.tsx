@@ -17,7 +17,7 @@ import {
 const logo = require("@/assets/images/remlex_logo.png");
 
 export default function Login() {
-  const login_test = useAuthStore((state) => state.login);
+  const login_test = useAuthStore((state) => state.login_test);
   const login = useAuthStore((state) => state.login);
   // const login = useAuthStore((state) => state.login);
   const router = useRouter();
@@ -78,11 +78,11 @@ export default function Login() {
       setErrors(fieldErrors);
       return;
     }
-
     // 2. Perform Mock Request Execution
     setIsLoading(true);
     try {
       await login_test(form);
+      router.replace("/(tabs)");
     } catch (err: any) {
       if (err.response?.data?.errors) {
         // Handle Laravel Backend Validation Errors Array Structure Map

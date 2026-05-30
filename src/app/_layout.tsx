@@ -1,7 +1,8 @@
-import "../global.css"
 import { useAuthStore } from "@/store/useAuthStore";
 import { Stack, useRouter } from "expo-router";
 import { useEffect } from "react";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import "../global.css";
 
 export default function RootLayout() {
   const { isAuthenticated, isHydrated, hydrateAuth } = useAuthStore();
@@ -22,10 +23,13 @@ export default function RootLayout() {
   }, [isAuthenticated, isHydrated]);
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="splash" />
-      <Stack.Screen name="login" />
-      <Stack.Screen name="(tabs)" />
-    </Stack>
+    <SafeAreaProvider>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="splash" />
+        <Stack.Screen name="login" />
+        <Stack.Screen name="register" />
+        <Stack.Screen name="(tabs)" />
+      </Stack>
+    </SafeAreaProvider>
   );
 }

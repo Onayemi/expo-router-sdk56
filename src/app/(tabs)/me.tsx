@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-export default function Profile() {
+export default function Me() {
   const insets = useSafeAreaInsets();
   return (
     <View
@@ -11,9 +11,7 @@ export default function Profile() {
         paddingTop: insets.top,
       }}
     >
-      <Text>Profile</Text>
+      <Text>me</Text>
     </View>
   );
 }
-
-const styles = StyleSheet.create({});

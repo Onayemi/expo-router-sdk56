@@ -1,7 +1,7 @@
 import AnimateIn from "@/components/AnimatedIn";
 import InputField from "@/components/InputField";
 import SocialButton from "@/components/SocialButton";
-import { loginSchema } from "@/schemas/authSchema";
+import { registerSchema } from "@/schemas/authSchema";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -16,23 +16,25 @@ import {
 
 const logo = require("@/assets/images/remlex_logo.png");
 
-export default function Login() {
-  const login = useAuthStore((state) => state.login);
+export default function Register() {
+  const register = useAuthStore((state) => state.register);
   const router = useRouter();
   // const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
   const [form, setForm] = useState({
+    name: "",
     email: "",
     password: "",
+    password_confirmation: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [serverError, setServerError] = useState("");
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     setErrors({});
     setServerError("");
 
-    const validation = loginSchema.safeParse(form);
+    const validation = registerSchema.safeParse(form);
     if (!validation.success) {
       const fieldErrors: Record<string, string> = {};
       validation.error.issues.forEach((issue) => {
@@ -44,7 +46,7 @@ export default function Login() {
     }
 
     try {
-      await login(form);
+      await register(form);
     } catch (err: any) {
       if (err.response?.data?.errors) {
         // Handle Laravel Backend Validation Errors Array Structure Map
@@ -65,6 +67,17 @@ export default function Login() {
         className="w-64 h-30 self-center"
         resizeMode="contain"
       />
+      <InputField
+        icon="person"
+        placeholder="Enter your Name"
+        // value={name}
+        // onChangeText={setName}
+        value={form.name}
+        onChangeText={(text) => setForm({ ...form, name: text })}
+        keyboardType="default" //
+        inputMode="text"
+      />
+      {errors.name ? <Text className="text-red-500">{errors.name}</Text> : null}
       <InputField
         icon="mail"
         placeholder="Enter your Email"
@@ -91,7 +104,22 @@ export default function Login() {
         <Text className="text-red-500">{errors.password}</Text>
       ) : null}
 
-      <View className="flex flex-row justify-between">
+      <InputField
+        icon="lock-closed"
+        placeholder="Enter your Password"
+        value={form.password_confirmation}
+        keyboardType="numeric"
+        inputMode="numeric"
+        onChangeText={(text) =>
+          setForm({ ...form, password_confirmation: text })
+        }
+        secureTextEntry
+      />
+      {errors.password_confirmation ? (
+        <Text className="text-red-500">{errors.password_confirmation}</Text>
+      ) : null}
+
+      <View className="flex flex-row justify-between mt-5">
         <TouchableOpacity onPress={() => console.log("Forgot password")}>
           <Text className="text-base font-bold text-accent">
             Forgot Password?
@@ -103,17 +131,17 @@ export default function Login() {
       </View>
       {/* Button */}
       <AnimateIn type="right" className="mb-4">
-        <Button title="Login" onPress={handleLogin} />
+        <Button title="Register" onPress={handleRegister} />
       </AnimateIn>
       {/* <Button title="Login" onPress={() => console.log("Button pressed")} /> */}
 
-      <TouchableOpacity onPress={() => router.replace("/register")}>
+      <TouchableOpacity onPress={() => router.replace("/login")}>
         <Text className="text-base font-bold text-gray-500 items-center mx-auto">
-          Don't have an account? Register
+          Already have an account? Login
         </Text>
       </TouchableOpacity>
 
-      <View className="flex-row justify-center items-center mt-5">
+      <View className="flex-row justify-center items-center">
         <View className="flex-1 h-[1px] bg-gray-300" />
         <Text className="text-base text-gray-700 mx-4">
           Or Continue Login With

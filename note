@@ -16,7 +16,50 @@ bunx expo start
 bun add @react-navigation/native
 bun add react-native-screens react-native-safe-area-context
 
+bun add moti
+bunx expo install react-native-reanimated
+
+<!-- Whatsapp linking -->
+
+bunx expo install expo-linking
+
 # update expo sdk
 
 bun add expo@56.0.6
 bunx expo install --check
+
+bun add -g eas-cli
+eas login
+eas build:configure
+
+eas project:info
+
+# Setup development client (dev client)
+
+bunx expo install expo-dev-client
+
+For Android:
+eas build --platform android --profile development
+eas build --platform android --profile preview
+For iOS:
+eas build --platform ios --profile development
+
+You only need to run eas build --profile development again if you:
+Install a new library that contains native code.
+Modify native configuration files (e.g., adding permissions in app.json or changing native project settings). Upgrade your Expo SDK version.
+If you only change your React/JavaScript logic, you never need to rebuild!
+
+bunx expo start --dev-client
+
+<!-- Github  -->
+
+git init
+git add .
+git commit -m "Initial push"
+git url
+git push -u origin main
+
+git pull
+git add .
+git commit -m "Initial push"
+git push -u origin main

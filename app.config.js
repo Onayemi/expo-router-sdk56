@@ -11,6 +11,9 @@ export default {
     userInterfaceStyle: "automatic",
     ios: {
       icon: "./assets/expo.icon",
+      infoPlist: {
+        LSApplicationQueriesSchemes: ["whatsapp"],
+      },
     },
     android: {
       adaptiveIcon: {
@@ -46,7 +49,8 @@ export default {
     extra: {
       router: {},
       eas: {
-        projectId: process.env.EXPO_PUBLIC_PROJECT_ID || "your-fallback-id",
+        projectId: process.env.EXPO_PUBLIC_PROJECT_ID,
+        // projectId: process.env.EXPO_PUBLIC_PROJECT_ID || "your-fallback-id",
       },
     },
     owner: "remlex",

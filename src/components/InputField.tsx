@@ -6,6 +6,8 @@ type InputFieldProps = {
   icon?: keyof typeof Ionicons.glyphMap;
   placeholder: string;
   value: string;
+  keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
+  inputMode: "text" | "email" | "numeric" | "tel";
   onChangeText: (text: string) => void;
   secureTextEntry?: boolean;
 };
@@ -15,6 +17,8 @@ export default function InputField({
   placeholder,
   value,
   onChangeText,
+  keyboardType = "default",
+  inputMode = "text",
   secureTextEntry = false,
 }: InputFieldProps) {
   const [hidePassword, setHidePassword] = useState<boolean>(secureTextEntry);
@@ -33,6 +37,8 @@ export default function InputField({
         placeholder={placeholder}
         value={value}
         onChangeText={onChangeText}
+        keyboardType={keyboardType}
+        inputMode={inputMode}
         secureTextEntry={secureTextEntry && hidePassword}
       />
       {secureTextEntry && (

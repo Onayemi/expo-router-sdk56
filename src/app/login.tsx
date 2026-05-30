@@ -17,7 +17,9 @@ import {
 const logo = require("@/assets/images/remlex_logo.png");
 
 export default function Login() {
+  const login_test = useAuthStore((state) => state.login);
   const login = useAuthStore((state) => state.login);
+  // const login = useAuthStore((state) => state.login);
   const router = useRouter();
   // const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
@@ -27,6 +29,7 @@ export default function Login() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [serverError, setServerError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
     setErrors({});
@@ -44,6 +47,7 @@ export default function Login() {
     }
 
     try {
+      // await login_test(form);
       await login(form);
     } catch (err: any) {
       if (err.response?.data?.errors) {
@@ -58,6 +62,41 @@ export default function Login() {
       }
     }
   };
+
+  const handleLoginTest = async () => {
+    setErrors({});
+    setServerError("");
+
+    // 1. Client-side Zod validation check
+    const validation = loginSchema.safeParse(form);
+    if (!validation.success) {
+      const fieldErrors: Record<string, string> = {};
+      validation.error.issues.forEach((issue) => {
+        if (issue.path[0])
+          fieldErrors[issue.path[0].toString()] = issue.message;
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+
+    // 2. Perform Mock Request Execution
+    setIsLoading(true);
+    try {
+      await login_test(form);
+    } catch (err: any) {
+      if (err.response?.data?.errors) {
+        // Handle Laravel Backend Validation Errors Array Structure Map
+        const apiErrors: Record<string, string> = {};
+        Object.keys(err.response.data.errors).forEach((key) => {
+          apiErrors[key] = err.response.data.errors[key][0];
+        });
+        setErrors(apiErrors);
+      } else {
+        setServerError(err.response?.data?.message || "Registration failed");
+      }
+    }
+  };
+
   return (
     <View className="flex-1 justify-center px-10 gap-4">
       <Image
@@ -102,8 +141,11 @@ export default function Login() {
         </TouchableOpacity>
       </View>
       {/* Button */}
-      <AnimateIn type="right" className="mb-4">
+      <AnimateIn type="right" className="mb-1">
         <Button title="Login" onPress={handleLogin} />
+      </AnimateIn>
+      <AnimateIn type="right" className="mb-1">
+        <Button title="Test Login" onPress={handleLoginTest} />
       </AnimateIn>
       {/* <Button title="Login" onPress={() => console.log("Button pressed")} /> */}
 

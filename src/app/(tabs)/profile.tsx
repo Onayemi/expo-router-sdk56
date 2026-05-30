@@ -1,3 +1,4 @@
+import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -11,6 +12,7 @@ export default function Profile() {
         paddingTop: insets.top,
       }}
     >
+      <StatusBar style="dark" />
       <Text>Profile</Text>
     </View>
   );

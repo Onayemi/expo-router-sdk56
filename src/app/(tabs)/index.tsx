@@ -10,7 +10,6 @@ import {
   Text,
   View,
 } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const products = [
   { id: 1, name: "Product A" },
@@ -20,7 +19,7 @@ const products = [
 ];
 
 export default function Index() {
-  const insets = useSafeAreaInsets();
+  // const insets = useSafeAreaInsets();
   const handleSupportChat = () => {
     openWhatsApp({
       phoneNumber: "+2348061313253",
@@ -43,7 +42,7 @@ export default function Index() {
         contentContainerStyle={{ paddingBottom: insets.bottom + 16 }}
         className="flex-1 px-4 pt-4"
       > */}
-      <View className="mt-10">
+      <View className="mt-3">
         <AutoScrollList
           data={products}
           itemWidth={200} // Matches the width of your item container

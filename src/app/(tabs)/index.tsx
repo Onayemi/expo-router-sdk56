@@ -1,4 +1,5 @@
 import AutoScrollList from "@/components/AutoScrollList";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import { openWhatsApp } from "@/utils/whatsapp";
 import { FontAwesome } from "@expo/vector-icons";
 import { Link } from "expo-router";
@@ -70,6 +71,15 @@ export default function Index() {
         <FontAwesome name="whatsapp" size={32} color="white" />
       </Pressable>
       {/* </ScrollView> */}
+
+      {/* Expanded full-width banner configuration using custom className values */}
+      <WhatsAppButton
+        phoneNumber="+2348061313253"
+        message="I just completed my bill payment on CoreApp and need invoice verification."
+        label="Contact Billing Support via WhatsApp"
+        className="w-full py-4 bg-emerald-600 border-0 rounded-2xl"
+        iconSize={18}
+      />
     </View>
   );
 }

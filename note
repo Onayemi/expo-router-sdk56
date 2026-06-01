@@ -16,12 +16,37 @@ bunx expo start
 bun add @react-navigation/native
 bun add react-native-screens react-native-safe-area-context
 
+bun add lucide-react-native react-native-svg
+
 bun add moti
 bunx expo install react-native-reanimated
 
 <!-- Whatsapp linking -->
 
 bunx expo install expo-linking
+bunx expo install expo-build-properties
+
+# app.config.js
+
+plugins: [
+[
+"expo-build-properties",
+{
+android: {
+// Manifest queries injection for explicit package visibility validation
+manifestQueries: {
+packageNames: ["com.whatsapp"],
+intentQueries: [
+{
+action: "android.intent.action.VIEW",
+data: { scheme: "whatsapp" }
+}
+]
+}
+}
+}
+]
+]
 
 # update expo sdk
 
@@ -44,6 +69,19 @@ eas build --platform android --profile preview
 For iOS:
 eas build --platform ios --profile development
 
+# For Android Device
+
+eas build --profile development --platform android
+
+# For iOS Device
+
+eas device:register
+eas build --profile development --platform ios
+
+# OR if you generate builds using Expo Application Services (EAS):
+
+eas build --profile development --platform all
+
 You only need to run eas build --profile development again if you:
 Install a new library that contains native code.
 Modify native configuration files (e.g., adding permissions in app.json or changing native project settings). Upgrade your Expo SDK version.
@@ -63,3 +101,47 @@ git pull
 git add .
 git commit -m "Initial push"
 git push -u origin main
+
+# Environment Variables
+
+Approach 1: Add them to the Expo Dashboard (Recommended)Expo expects you to link variables to specific environments (development, preview, production) directly on their servers.
+
+- Go to Expo.dev, log in, and click on your project.
+- In the left-hand sidebar, click on Environment Variables.
+- Click Create Variable.
+- Set the Name (e.g., EXPO_PUBLIC_API_URL), the Value, select development under the Environment tags, and choose Plain text or Sensitive as the visibility.
+- Save it, and re-run your eas build command. The warning will disappear, and the variables will be injected properly.
+
+Approach 2: Push your local .env via the CLI
+
+# This securely pushes your local keys to your EAS project's development profile
+
+> eas env:create --environment development --visibility plaintext
+> eas env:create --environment development,preview,production --visibility plaintext
+
+```bash
+{
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "environment": "development"
+    },
+    "preview": {
+      "distribution": "internal",
+      "environment": "preview"
+    },
+    "production": {
+      "environment": "production"
+    }
+  }
+}
+
+```
+
+Approach 3: Tell EAS to look for your local files (Fastest bypass)
+
+- You can create a .easignore file in your root folder and make sure it does not include your .env files, allowing EAS to upload them securely just for the build runner.
+
+# Note
+
+Never prefix absolute backend master secrets (like a Stripe Secret Key or AWS Private Key) with EXPO*PUBLIC*.

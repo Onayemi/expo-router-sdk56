@@ -16,15 +16,6 @@ export default {
       },
     },
     android: {
-      intentFilters: [
-        {
-          action: "VIEW",
-          data: {
-            scheme: "https",
-            host: "wa.me",
-          },
-        },
-      ],
       adaptiveIcon: {
         backgroundColor: "#E6F4FE",
         foregroundImage: "./assets/images/android-icon-foreground.png",
@@ -47,6 +38,23 @@ export default {
           android: {
             image: "./assets/images/splash-icon.png",
             imageWidth: 76,
+          },
+        },
+      ],
+      // NEW: Config Plugin injection to resolve package visibility queries for Android 11+
+      [
+        "expo-build-properties",
+        {
+          android: {
+            manifestQueries: {
+              packageNames: ["com.whatsapp"],
+              intentQueries: [
+                {
+                  action: "android.intent.action.VIEW",
+                  data: { scheme: "whatsapp" },
+                },
+              ],
+            },
           },
         },
       ],

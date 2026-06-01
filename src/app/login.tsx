@@ -8,6 +8,7 @@ import { useState } from "react";
 import {
   Button,
   Image,
+  ImageBackground,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -98,77 +99,85 @@ export default function Login() {
   };
 
   return (
-    <View className="flex-1 justify-center px-10 gap-4">
-      <Image
-        source={logo}
-        className="w-64 h-30 self-center"
-        resizeMode="contain"
-      />
-      <InputField
-        icon="mail"
-        placeholder="Enter your Email"
-        // value={email}
-        // onChangeText={setEmail}
-        value={form.email}
-        onChangeText={(text) => setForm({ ...form, email: text })}
-        keyboardType="email-address" //
-        inputMode="email"
-      />
-      {errors.email ? (
-        <Text className="text-red-500">{errors.email}</Text>
-      ) : null}
-      <InputField
-        icon="lock-closed"
-        placeholder="Enter your Password"
-        value={form.password}
-        keyboardType="numeric"
-        inputMode="numeric"
-        onChangeText={(text) => setForm({ ...form, password: text })}
-        secureTextEntry
-      />
-      {errors.password ? (
-        <Text className="text-red-500">{errors.password}</Text>
-      ) : null}
+    <ImageBackground
+      source={{
+        uri: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=600",
+      }}
+      className="flex-1"
+      resizeMode="cover"
+    >
+      <View className="flex-1 justify-center px-10 gap-4">
+        <Image
+          source={logo}
+          className="w-64 h-30 self-center"
+          resizeMode="contain"
+        />
+        <InputField
+          icon="mail"
+          placeholder="Enter your Email"
+          // value={email}
+          // onChangeText={setEmail}
+          value={form.email}
+          onChangeText={(text) => setForm({ ...form, email: text })}
+          keyboardType="email-address" //
+          inputMode="email"
+        />
+        {errors.email ? (
+          <Text className="text-red-500">{errors.email}</Text>
+        ) : null}
+        <InputField
+          icon="lock-closed"
+          placeholder="Enter your Password"
+          value={form.password}
+          keyboardType="numeric"
+          inputMode="numeric"
+          onChangeText={(text) => setForm({ ...form, password: text })}
+          secureTextEntry
+        />
+        {errors.password ? (
+          <Text className="text-red-500">{errors.password}</Text>
+        ) : null}
 
-      <View className="flex flex-row justify-end">
-        <TouchableOpacity onPress={() => console.log("Forgot password")}>
-          <Text className="text-base font-bold text-accent">
-            Forgot Password?
-          </Text>
-        </TouchableOpacity>
-        {/* <TouchableOpacity onPress={() => router.replace("/(tabs)")}>
+        <View className="flex flex-row justify-end">
+          <TouchableOpacity onPress={() => console.log("Forgot password")}>
+            <Text className="text-base font-bold text-accent">
+              Forgot Password?
+            </Text>
+          </TouchableOpacity>
+          {/* <TouchableOpacity onPress={() => router.replace("/(tabs)")}>
           <Text className="text-base font-bold text-accent">Dashboard</Text>
         </TouchableOpacity> */}
+        </View>
+        {/* Button */}
+        <AnimateIn type="right" className="mb-1">
+          <Button title="Login" onPress={handleLogin} />
+        </AnimateIn>
+        <AnimateIn type="right" className="mb-1">
+          <Button title="Test Login" onPress={handleLoginTest} />
+        </AnimateIn>
+        {/* <Button title="Login" onPress={() => console.log("Button pressed")} /> */}
+
+        <TouchableOpacity onPress={() => router.replace("/register")}>
+          <Text className="text-base font-bold text-gray-500 items-center mx-auto">
+            Don't have an account? Register
+          </Text>
+        </TouchableOpacity>
+
+        <View className="flex-row justify-center items-center mt-5">
+          <View className="flex-1 h-[1px] bg-gray-300" />
+          <Text className="text-base text-gray-700 mx-4">
+            Or Continue Login With
+          </Text>
+          <View className="flex-1 h-[1px] bg-gray-300" />
+        </View>
+
+        <SocialButton
+          // className="bg-primary"
+          title="Google"
+          onPress={() => console.log("Google login")}
+        />
       </View>
-      {/* Button */}
-      <AnimateIn type="right" className="mb-1">
-        <Button title="Login" onPress={handleLogin} />
-      </AnimateIn>
-      <AnimateIn type="right" className="mb-1">
-        <Button title="Test Login" onPress={handleLoginTest} />
-      </AnimateIn>
-      {/* <Button title="Login" onPress={() => console.log("Button pressed")} /> */}
-
-      <TouchableOpacity onPress={() => router.replace("/register")}>
-        <Text className="text-base font-bold text-gray-500 items-center mx-auto">
-          Don't have an account? Register
-        </Text>
-      </TouchableOpacity>
-
-      <View className="flex-row justify-center items-center mt-5">
-        <View className="flex-1 h-[1px] bg-gray-300" />
-        <Text className="text-base text-gray-700 mx-4">
-          Or Continue Login With
-        </Text>
-        <View className="flex-1 h-[1px] bg-gray-300" />
-      </View>
-
-      <SocialButton
-        // className="bg-primary"
-        title="Google"
-        onPress={() => console.log("Google login")}
-      />
-    </View>
+    </ImageBackground>
   );
 }
 

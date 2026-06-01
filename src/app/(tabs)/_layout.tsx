@@ -5,6 +5,8 @@ import { Tabs, useSegments } from "expo-router";
 import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+const WHATSAPP_NUMBER =
+  process.env.EXPO_PUBLIC_WHATSAPP_NUMBER || "+2348027819593"; // Fallback to hardcoded number if env variable is missing
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
 
@@ -57,9 +59,31 @@ export default function TabsLayout() {
           }}
         />
         <Tabs.Screen
+          name="(dynamic)/products/[type]"
+          options={{
+            title: "Product Details",
+            href: null,
+          }}
+        />
+        <Tabs.Screen
+          name="(dynamic)/analytics/[id]"
+          options={{
+            title: "Analytics Details",
+            href: null,
+          }}
+        />
+        <Tabs.Screen
+          name="(dynamic)/checkout"
+          options={{
+            title: "Checkout Details",
+            href: null,
+          }}
+        />
+        <Tabs.Screen
           name="finance"
           options={{
             title: "Finance",
+            headerShown: false,
             tabBarLabel: "Finance",
             tabBarIcon: ({ color, size }) => (
               <FontAwesome name="money" size={size} color={color} />
@@ -101,7 +125,7 @@ export default function TabsLayout() {
           className="absolute z-50 items-end"
         >
           <WhatsAppButton
-            phoneNumber="+2348027819593"
+            phoneNumber={WHATSAPP_NUMBER}
             message="Hello, I have a question about my recent transaction on CoreApp. Can you assist me with the details?"
             iconSize={24}
             className="w-14 h-14 bg-emerald-100 border border-emerald-200 rounded-full shadow-lg shadow-emerald-900/10 items-center justify-center"

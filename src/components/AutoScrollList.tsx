@@ -1,9 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type ReactElement } from "react";
 import { FlatList } from "react-native";
 
 interface Props {
   data: any[];
-  renderItem: (item: any) => JSX.Element;
+  renderItem: (item: any) => ReactElement;
   itemWidth: number; // Width of each item
 }
 

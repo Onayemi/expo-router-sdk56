@@ -26,6 +26,10 @@ bunx expo install react-native-reanimated
 bunx expo install expo-linking
 bunx expo install expo-build-properties
 
+<!-- payment integration -->
+
+bunx expo install react-native-webview
+
 # app.config.js
 
 plugins: [
@@ -72,6 +76,9 @@ eas build --platform ios --profile development
 # For Android Device
 
 eas build --profile development --platform android
+
+eas build:run -p android
+bunx expo start --dev-client
 
 # For iOS Device
 
@@ -145,3 +152,8 @@ Approach 3: Tell EAS to look for your local files (Fastest bypass)
 # Note
 
 Never prefix absolute backend master secrets (like a Stripe Secret Key or AWS Private Key) with EXPO*PUBLIC*.
+
+```bash
+Private Policy
+https://app-privacy-policy-generator.firebaseapp.com/
+```

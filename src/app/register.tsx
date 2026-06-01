@@ -119,15 +119,15 @@ export default function Register() {
         <Text className="text-red-500">{errors.password_confirmation}</Text>
       ) : null}
 
-      <View className="flex flex-row justify-between mt-5">
+      <View className="flex flex-row justify-end mt-5">
         <TouchableOpacity onPress={() => console.log("Forgot password")}>
           <Text className="text-base font-bold text-accent">
             Forgot Password?
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.replace("/(tabs)")}>
+        {/* <TouchableOpacity onPress={() => router.replace("/(tabs)")}>
           <Text className="text-base font-bold text-accent">Dashboard</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       {/* Button */}
       <AnimateIn type="right" className="mb-4">

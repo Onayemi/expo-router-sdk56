@@ -4,6 +4,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { Link, useRouter } from "expo-router";
 import {
   Button,
+  ImageBackground,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -19,6 +20,9 @@ const products = [
   { id: 3, name: "Product C" },
   { id: 4, name: "Product D" },
 ];
+
+const WHATSAPP_NUMBER =
+  process.env.EXPO_PUBLIC_WHATSAPP_NUMBER || "+2348027819593"; // Fallback to hardcoded number if env variable is missing
 
 export default function Index() {
   const insets = useSafeAreaInsets();
@@ -53,10 +57,49 @@ export default function Index() {
         <Link asChild push href={"/splash"}>
           <Button title="Go to SplashScreen" />
         </Link>
+        <View className="mt-3">
+          <AutoScrollList
+            data={products}
+            itemWidth={200} // Matches the width of your item container
+            renderItem={(item) => (
+              <TouchableOpacity
+                key={item.id}
+                activeOpacity={0.8}
+                className="w-[150px] h-40 bg-blue-500 m-2 rounded-lg justify-center items-center active:scale-[0.98]"
+                onPress={() =>
+                  router.navigate({
+                    pathname: "/(tabs)/(dynamic)/products/[type]",
+                    params: { type: item.id },
+                  })
+                }
+              >
+                {/* <Text className="text-white font-bold text-center px-2">
+                  {item.name}
+                </Text> */}
+                <ImageBackground
+                  source={{
+                    uri:
+                      item.image ||
+                      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400",
+                  }}
+                  className="w-full h-full justify-end"
+                  resizeMode="cover"
+                >
+                  {/* 3. GRADIENT / SEMI-TRANSPARENT SCRIM OVERLAY FOR TEXT READABILITY */}
+                  <View className="w-full bg-slate-950/50 p-3 pt-6 justify-center items-center">
+                    <Text className="text-white font-black text-center text-sm tracking-wide shadow-sm">
+                      {item.name}
+                    </Text>
+                  </View>
+                </ImageBackground>
+              </TouchableOpacity>
+            )}
+          />
+        </View>
 
         {/* Whatsapp Icon */}
         <WhatsAppButton
-          phoneNumber="+2348027819593"
+          phoneNumber={WHATSAPP_NUMBER}
           message="Hello, I have a question about my recent transaction on CoreApp. Can you assist me with the details?"
           label="Message Support"
           className="w-full mt-4"

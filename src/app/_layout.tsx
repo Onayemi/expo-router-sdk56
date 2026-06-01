@@ -26,7 +26,6 @@ export default function RootLayout() {
     // 2. Hide Splash Screen cleanly now that credentials state is fully loaded
     SplashScreen.hideAsync().catch(() => {});
 
-    // 3. Evaluate routing segments to ensure secure navigation state boundaries
     // Checks if the user is currently inside a route group named "(protected)"
     const inProtectedGroup = segments[0] === "(tabs)";
 
@@ -45,13 +44,6 @@ export default function RootLayout() {
         <Stack.Screen name="splash" />
         <Stack.Screen name="login" />
         <Stack.Screen name="register" />
-        <Stack.Screen
-          name="products/[id]"
-          options={{
-            headerShown: false,
-            presentation: "card", // Sweeps in naturally from the right side margin
-          }}
-        />
         <Stack.Screen name="(tabs)" />
       </Stack>
       {/* <Slot /> */}

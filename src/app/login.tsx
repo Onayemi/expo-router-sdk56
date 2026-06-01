@@ -18,7 +18,7 @@ const logo = require("@/assets/images/remlex_logo.png");
 
 export default function Login() {
   const login_test = useAuthStore((state) => state.login_test);
-  const login = useAuthStore((state) => state.login);
+  // const login = useAuthStore((state) => state.login);
   // const login = useAuthStore((state) => state.login);
   const router = useRouter();
   // const [email, setEmail] = useState("");
@@ -47,8 +47,8 @@ export default function Login() {
     }
 
     try {
-      // await login_test(form);
-      await login(form);
+      await login_test(form);
+      // await login(form);
     } catch (err: any) {
       if (err.response?.data?.errors) {
         // Handle Laravel Backend Validation Errors Array Structure Map
@@ -130,15 +130,15 @@ export default function Login() {
         <Text className="text-red-500">{errors.password}</Text>
       ) : null}
 
-      <View className="flex flex-row justify-between">
+      <View className="flex flex-row justify-end">
         <TouchableOpacity onPress={() => console.log("Forgot password")}>
           <Text className="text-base font-bold text-accent">
             Forgot Password?
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.replace("/(tabs)")}>
+        {/* <TouchableOpacity onPress={() => router.replace("/(tabs)")}>
           <Text className="text-base font-bold text-accent">Dashboard</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       {/* Button */}
       <AnimateIn type="right" className="mb-1">

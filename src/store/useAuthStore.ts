@@ -31,8 +31,22 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   hydrateAuth: async () => {
     try {
       const storedToken = await SecureStore.getItemAsync("auth_token");
-      if (storedToken) {
-        set({ token: storedToken, isAuthenticated: true });
+      // if (storedToken) {
+      //   set({ token: storedToken, isAuthenticated: true });
+      //   await get().fetchUser();
+      // }
+      // 💡 FIX: If it's your mock token, bypass the network request and hydrate the user locally
+      if (storedToken === "mock-jwt-token-12345") {
+        set({
+          user: {
+            id: 1,
+            name: "Samuel Taiwo",
+            email: "onayemi18@gmail.com",
+          },
+          isAuthenticated: true,
+        });
+      } else {
+        // Otherwise, run the normal production API database check
         await get().fetchUser();
       }
     } catch (e) {
@@ -54,7 +68,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const dummyToken = "mock-jwt-token-12345";
       const dummyUser = {
         id: 1,
-        name: "Samuel Taiwo (Mock)",
+        name: "Samuel Taiwo",
         email: credentials.email,
       };
 
@@ -93,6 +107,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   fetchUser: async () => {
+    // 💡 FIX: Prevent the backend from intercepting your mock session
+    if (get().token === "mock-jwt-token-12345") {
+      return;
+    }
     try {
       const response = await api.get("/user");
       set({ user: response.data, isAuthenticated: true });

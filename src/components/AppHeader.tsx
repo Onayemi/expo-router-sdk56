@@ -1,3 +1,4 @@
+import { useAuthStore } from "@/store/useAuthStore";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Image, Text, TouchableOpacity, View } from "react-native";
@@ -14,6 +15,7 @@ interface CustomTabHeaderProps {
 export default function AppHeader({ options, route }: CustomTabHeaderProps) {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { user, logout } = useAuthStore();
 
   const currentTabTitle = options.title || route.name;
   const isHomeScreen = route.name === "index";
@@ -49,7 +51,9 @@ export default function AppHeader({ options, route }: CustomTabHeaderProps) {
             <Text className="text-[11px] text-slate-400 font-medium">
               Welcome back,
             </Text>
-            <Text className="text-sm font-bold text-slate-800">Samuel</Text>
+            <Text className="text-sm font-bold text-slate-800">
+              {user?.name}
+            </Text>
           </View>
         )}
       </TouchableOpacity>
